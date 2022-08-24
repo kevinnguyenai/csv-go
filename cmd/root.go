@@ -30,6 +30,7 @@ import (
 )
 
 var cfgFile string
+var userLicense string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -38,7 +39,16 @@ var rootCmd = &cobra.Command{
 	Long:  `Porfolio trading cli app used to read my history transaction of my own`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Printf("this is csv-go application of %s\n", cfgFile)
+		fmt.Printf("author: %s\n", viper.GetViper().GetString("author"))
+		if userLicense == "" {
+			fmt.Printf("license: %s\n", viper.GetViper().GetString("license"))
+		} else {
+			fmt.Printf("license:%s\n", userLicense)
+		}
+		fmt.Printf("\n")
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -58,7 +68,13 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.csv-go.yaml)")
-
+	rootCmd.PersistentFlags().StringP("author", "a", "YOURNAME", "author name for copyright attribution")
+	rootCmd.PersistentFlags().StringVarP(&userLicense, "license", "l", "", "name of license for projects")
+	rootCmd.PersistentFlags().Bool("viper", true, "use Viper for configuration")
+	viper.BindPFlag("author", rootCmd.PersistentFlags().Lookup("author"))
+	viper.BindPFlag("userViper", rootCmd.PersistentFlags().Lookup("viper"))
+	viper.SetDefault("author", "NAME HERE <EMAIL ADDRESS>")
+	viper.SetDefault("license", "apache")
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
