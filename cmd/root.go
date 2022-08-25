@@ -40,12 +40,25 @@ var rootCmd = &cobra.Command{
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("this is csv-go application of %s\n", cfgFile)
+		fmt.Printf("this is csv-go application with configuraiton file %s\n", cfgFile)
 		fmt.Printf("author: %s\n", viper.GetViper().GetString("author"))
 		if userLicense == "" {
 			fmt.Printf("license: %s\n", viper.GetViper().GetString("license"))
 		} else {
 			fmt.Printf("license:%s\n", userLicense)
+		}
+		_err := viper.ReadInConfig()
+		if _err == nil {
+			fmt.Printf("Configuration: \n")
+			_host := viper.Get("Server.Host")
+			if _host != nil {
+				fmt.Printf("Host: %s\n", _host)
+			}
+			_port := viper.Get("Server.Port")
+			if _port != nil {
+				fmt.Printf("Port: %d\n", _port)
+			}
+
 		}
 		fmt.Printf("\n")
 	},

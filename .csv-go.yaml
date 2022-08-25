@@ -1,0 +1,10 @@
+author: Kevin Nguyen
+license: MIT
+repos: github.com/kevinnguyenai/csv-go
+CryptoCompare:
+  Url: 'https://min-api.cryptocompare.com/data'
+  Token: 'bb5f46ff6a3e522ad6a6774e48a514c662b6b71e032befb8bb88a03653ca904c'
+Limited:
+  buffer: 1000000
+  date_time: 2
+  date_from: 2022-08-18

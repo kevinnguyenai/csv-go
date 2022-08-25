@@ -25,11 +25,13 @@ import (
 	"fmt"
 	"time"
 
+	pkg "github.com/kevinnguyenai/csv-go/pkg"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
 var date string
+var file string
 var crypto []string
 
 // porfolioCmd represents the porfolio command
@@ -44,18 +46,28 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("porfolio called")
+		if len(file) != 0 {
+			fmt.Printf("file: %s\n", file)
+		}
+		fmt.Printf("author: %s\n", viper.Get("author"))
+		fmt.Printf("license: %s\n", viper.Get("license"))
 		if len(date) == 0 {
 			fmt.Printf("date:%s\n", viper.GetViper().GetString("date"))
 		} else {
 			_date, _err := time.Parse(time.RFC3339, date)
 			if _err == nil {
 				fmt.Printf("date: %d\n", _date.Unix())
-				pkg.csvparser.create("transactions.csv")
+				fileParser := &pkg.FileObject{}
+				_isErr := fileParser.Create("")
+				if _isErr != nil {
+					fmt.Println("initial CsvParser Successful")
+				}
 			}
 		}
 		if len(crypto) > 0 {
 			fmt.Printf("crypto: %s\n", crypto)
 		}
+
 	},
 }
 
@@ -68,6 +80,7 @@ func init() {
 	// and all subcommands, e.g.:
 	// porfolioCmd.PersistentFlags().String("foo", "", "A help for foo")
 	// example crypto : "BTC","ETH"
+	porfolioCmd.PersistentFlags().StringVarP(&file, "file", "f", "", "filename will used to run porfolio")
 	porfolioCmd.PersistentFlags().StringArrayVarP(&crypto, "crypto", "c", []string{}, "input crypto which want to sum up")
 	// example "2022-Aug-25"
 	porfolioCmd.PersistentFlags().StringVarP(&date, "date", "t", "", "input date which want to sum up")

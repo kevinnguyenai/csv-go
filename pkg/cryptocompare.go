@@ -5,8 +5,9 @@ import (
 	"net/http"
 )
 
-type CryptoCompare interface {
-	create(url string, protocol string, method string, token string)
+type CryptoCompareApi interface {
+	//Capitalize your first character function name
+	Create(url string, protocol string, method string, token string, body byte) error
 }
 
 type Requestor struct {
@@ -16,7 +17,7 @@ type Requestor struct {
 	request      *http.Request
 }
 
-func (api *Requestor) create(url string, protocol string, method string, token string, body byte) error {
+func (api *Requestor) Create(url string, protocol string, method string, token string, body byte) error {
 	jsonBody := []byte{body}
 	req, err := http.NewRequest(method, url, bytes.NewReader(jsonBody))
 	if err != nil {
